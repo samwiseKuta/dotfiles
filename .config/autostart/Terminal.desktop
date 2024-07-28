@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Exec=gnome-terminal
+X-GNOME-Autostart-enabled=true
+NoDisplay=false
+Hidden=false
+Name[en_US]=Terminal
+Comment[en_US]=Opens terminal on startup
+X-GNOME-Autostart-Delay=0

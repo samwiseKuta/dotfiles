@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Exec=/home/charming/.customCommandsAndAliases/source.sh
+X-GNOME-Autostart-enabled=true
+NoDisplay=false
+Hidden=false
+Name[en_US]=Source commands
+Comment[en_US]=Sources custom commands
+X-GNOME-Autostart-Delay=1
