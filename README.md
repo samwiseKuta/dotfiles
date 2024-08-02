@@ -3,11 +3,11 @@
 
 ## Installation
 ### Linux
-- 1) Create a directory in your $HOME folder, call it dotfiles for example. Then navigate into it
+**1)** Create a directory in your $HOME folder, call it dotfiles for example. Then navigate into it
 ```cd ~/ && mkdir dotfiles && cd dotfiles```
-- 2) Clone this repo
+**2)** Clone this repo
 ```git clone https://github.com/dantolas/dotfiles```
-- 3) Now u can either run the installer to do everything for u, including installing applications,
+**3)** Now u can either run the installer to do everything for u, including installing applications,
 or if you just want the config files then install GNU stow and use it to symlink the config files.
 - **Be aware** that this will overwrite any of the dotfiles with the same name that already exist
 in the $HOME ( ~/. ) directory such as .bashrc or .config
