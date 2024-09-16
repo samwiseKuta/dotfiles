@@ -1,11 +1,8 @@
 return {
 
-        --Telescope
-        "nvim-telescope/telescope.nvim",
-        dependencies = {
-            "plenary"
-        },
-
+    --Telescope
+    "nvim-telescope/telescope.nvim",
+    dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
         require('telescope').setup({})
         local builtin = require('telescope.builtin')

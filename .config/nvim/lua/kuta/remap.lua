@@ -1,9 +1,10 @@
 --Set the leader to start commands
 vim.g.mapleader = " "
--- Enter netRw (the file tree)
-vim.keymap.set("n", "<leader>ko",vim.cmd.Ex)
+-- Open netrw (File tree)
+vim.keymap.set("n", "<leader>ko",':45Lex<CR>')
 --CTRL C should function the same as escape, something with vertical save idk theprimeagem said it
 vim.keymap.set("n","<C-c>","<Esc>")
+vim.keymap.set("v","<C-c>","<Esc>")
 --Remove trailing whitespace
 vim.keymap.set('n', '<Leader>rws', [[:%s/\s\+$//e<cr>]])
 --Move highlited lines up and down with capital J and K
@@ -20,8 +21,6 @@ vim.keymap.set("n", "N", "Nzz")
 vim.keymap.set("x","<leader>p","\"_dP")
 --Paste from system clipboard
 vim.keymap.set("n","<leader>p","\"+p")
--- Set buftype to non-empty (e.g. nowrite) to prevent Neovim asking the file has changed question
-vim.keymap.set("v","<leader>p","\"+p")
 --Copy to system clipboard
 vim.keymap.set("n","<leader>y","\"+y")
 vim.keymap.set("v","<leader>y","\"+y")
@@ -31,20 +30,16 @@ vim.keymap.set({"n", "v"}, "<leader>d", [["_d]])
 vim.keymap.set("n","<leader>cap",":let @+ = expand(\"%:p\")")
 --Copy relative path to current buffer
 vim.keymap.set("n","<leader>crp",":let @+ = expand(\"%\")")
+-- Set buftype to non-empty (e.g. nowrite) to prevent Neovim asking the file has changed question
+vim.keymap.set("v","<leader>p","\"+p")
 --No capital Q, it's evil
 vim.keymap.set("n","Q","<nop")
---LSP suggestions navigation
---vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
---vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
---vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
---vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
 --Find and replace current word
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 --Make current file executable (Linux)
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 --LSP bindings
 vim.api.nvim_create_autocmd('LspAttach',{
-    group = kuta,
     callback = function(e)
 
         local opts = {buffer = e.buf}
@@ -63,3 +58,4 @@ vim.api.nvim_create_autocmd('LspAttach',{
 })
 --Auto completion bindings
 -- Bindings can be found in lazy/cmp.lua
+

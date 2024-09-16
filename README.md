@@ -1,5 +1,11 @@
 # Dotfiles / System and Application configuration files
-**So that I can easily transport my setup to any machine (running linux and maybe windows...)**
+
+Files containing my preffered software configurations just the way I like them.
+
+This Readme should serve as a guide how to transfer my dotfiles, preffered system configurations or
+even apps from one machine to another.
+
+For now only focused on moving configurations through Linux machines, might make windows later.
 
 ## Installation
 ### Linux
@@ -8,12 +14,16 @@
 **2)** Clone this repo
 ```git clone https://github.com/dantolas/dotfiles```
 **3)** Now u can either run the installer to do everything for u, including installing applications,
-or if you just want the config files then install GNU stow and use it to symlink the config files.
+or if you just want the dotfiles then install GNU stow and use it to symlink the dotfiles directory.
 - **Be aware** that this will overwrite any of the dotfiles with the same name that already exist
 in the $HOME ( ~/. ) directory such as .bashrc or .config
-**Run installer**
+
+- **Run installer**
 ```bash debian_installer.sh```
-**Symlink dotfiles**
+- **Symlink dotfiles**
 ```stow .```
 
-U should then see symlink files pointing to the ~/dotfiles/* config files in your $HOME directory.
+Afterwards you should see that the dotfiles in your $HOME directory (~/) are symlinked and pointing
+to this dotfiles directory and it's content. ($HOME dotfiles -> ./dotfiles/...)
+
+

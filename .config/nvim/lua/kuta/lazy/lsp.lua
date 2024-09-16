@@ -1,7 +1,7 @@
 -- <ENSURE_INSTALLED>
 -- Servers that will be installed and maintained by Mason
 local lsp_servers = {
-    "tsserver",
+    "ts_ls",
     "gradle_ls",
     "bashls",
     "cssls",
