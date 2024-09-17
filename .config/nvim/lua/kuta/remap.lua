@@ -1,7 +1,7 @@
 --Set the leader to start commands
 vim.g.mapleader = " "
 -- Open netrw (File tree)
-vim.keymap.set("n", "<leader>ko",':45Lex<CR>')
+vim.keymap.set("n", "<leader>ko",':30Lex<CR>')
 --CTRL C should function the same as escape, something with vertical save idk theprimeagem said it
 vim.keymap.set("n","<C-c>","<Esc>")
 vim.keymap.set("v","<C-c>","<Esc>")
@@ -56,6 +56,14 @@ vim.api.nvim_create_autocmd('LspAttach',{
         vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
     end
 })
+-- adjust split sizes easier
+vim.keymap.set("n", "<C-Left>", ":vertical resize +3<CR>")		-- Control+Left resizes vertical split +
+vim.keymap.set("n", "<C-Right>", ":vertical resize -3<CR>")	-- Control+Right resizes vertical split -
+-- easy split navigation
+vim.keymap.set("n", "<C-h>", "<C-w>h")						-- control+h switches to left split
+vim.keymap.set("n", "<C-l>", "<C-w>l")						-- control+l switches to right split
+vim.keymap.set("n", "<C-j>", "<C-w>j")						-- control+j switches to bottom split
+vim.keymap.set("n", "<C-k>", "<C-w>k")						-- control+k switches to top split
 --Auto completion bindings
 -- Bindings can be found in lazy/cmp.lua
 
