@@ -1,46 +1,22 @@
+local part_separator = "|";
+
+-- Determines at what width the element should be truncated
 local truncated_width = {
     mode = 80,
-    git_status = 90,
+    git_status = 70,
     filename = 140,
-    line_col = 60
+    line_col = 70
 }
 
-
+-- Helper function 
 local function is_truncated(width)
     local current_width = vim.api.nvim_win_get_width(0)
     return current_width < width
 end
 
 
--- you can of course pick whatever colour you want, I picked these colours
--- because I use Gruvbox and I like them
-local highlights = {
-  {'StatusLine', { fg = '#3C3836', bg = '#EBDBB2' }},
-  {'StatusLineNC', { fg = '#3C3836', bg = '#928374' }},
-  {'Mode', { bg = '#928374', fg = '#1D2021', gui="bold" }},
-  {'LineCol', { bg = '#928374', fg = '#1D2021', gui="bold" }},
-  {'Git', { bg = '#504945', fg = '#EBDBB2' }},
-  {'Filetype', { bg = '#504945', fg = '#EBDBB2' }},
-  {'Filename', { bg = '#504945', fg = '#EBDBB2' }},
-  {'ModeAlt', { bg = '#504945', fg = '#928374' }},
-  {'GitAlt', { bg = '#3C3836', fg = '#504945' }},
-  {'LineColAlt', { bg = '#504945', fg = '#928374' }},
-  {'FiletypeAlt', { bg = '#3C3836', fg = '#504945' }},
-}
-
-
-local set_highlight = function(group, options)
-  local bg = options.bg == nil and '' or 'guibg=' .. options.bg
-  local fg = options.fg == nil and '' or 'guifg=' .. options.fg
-  local gui = options.gui == nil and '' or 'gui=' .. options.gui
-
-  vim.cmd(string.format('hi %s %s %s %s', group, bg, fg, gui))
-end
-
-for _,highlight in ipairs(highlights) do
-  set_highlight(highlight[1], highlight[2])
-end
-
+-- Maps the shortcut vim returns for it's mode to what should be displayed on the statusline
+-- Has two values, the shorter one is for truncated width
 local modes = {
  ['n']  = {'Normal', 'N'};
   ['no'] = {'N·Pending', 'N·P'};
@@ -64,6 +40,7 @@ local modes = {
   ['t']  = {'Terminal ', 'T'};
 }
 
+-- Outputs the current mode, either full or truncated based on truncated_width.mode
 local function get_mode()
     local current_mode = vim.api.nvim_get_mode().mode
     if is_truncated(truncated_width.mode) then
@@ -93,13 +70,16 @@ end
 --end
 
 
-local function filename()
+-- Outputs either the full filepath or a truncated one
+local function get_filename()
 
     if is_truncated(truncated_width.filename) then return " %<%f " end
     return " %<%F "
 end
 
-local function lsp()
+
+-- Outputs errors, hints and warnings it gets from the LSP,either the native or a custom one
+local function get_lsp_info()
   local count = {}
   local levels = {
     errors = "Error",
@@ -135,20 +115,21 @@ end
 
 
 
-local function filetype()
+-- Outputs detected filetype
+local function get_filetype()
   return string.format(" %s ", vim.bo.filetype):upper()
 end
 
 
-local function lineinfo()
+local function get_lineinfo()
   if vim.bo.filetype == "alpha" then
     return ""
   end
   return "%l|%c %P"
 end
 
--- highlight groups
-local colors = {
+-- Parts of the statusline
+local parts = {
   active        = '%#StatusLine#',
   inactive      = '%#StatuslineNC#',
   mode          = '%#Mode#',
@@ -160,25 +141,63 @@ local colors = {
   line_col      = '%#LineCol#',
   line_col_alt  = '%#LineColAlt#',
 }
+
+-- you can of course pick whatever colour you want, I picked these colours
+-- because I use Gruvbox and I like them
+local highlights = {
+  {'StatusLine', { fg = '#3C3836', bg = '#EBDBB2' }},
+  {'StatusLineNC', { fg = '#3C3836', bg = '#928374' }},
+  {'Mode', { bg = '#928374', fg = '#1D2021', gui="bold" }},
+  {'LineCol', { bg = '#928374', fg = '#1D2021', gui="bold" }},
+  {'Git', { bg = '#504945', fg = '#EBDBB2' }},
+  {'Filetype', { bg = '#504945', fg = '#EBDBB2' }},
+  {'Filename', { bg = '#504945', fg = '#EBDBB2' }},
+  {'ModeAlt', { bg = '#504945', fg = '#928374' }},
+  {'GitAlt', { bg = '#3C3836', fg = '#504945' }},
+  {'LineColAlt', { bg = '#504945', fg = '#928374' }},
+  {'FiletypeAlt', { bg = '#3C3836', fg = '#504945' }},
+}
+
+
+local set_highlight = function(group, options)
+  local bg = options.bg == nil and '' or 'guibg=' .. options.bg
+  local fg = options.fg == nil and '' or 'guifg=' .. options.fg
+  local gui = options.gui == nil and '' or 'gui=' .. options.gui
+
+  vim.cmd(string.format('hi %s %s %s %s', group, bg, fg, gui))
+end
+
+for _,highlight in ipairs(highlights) do
+  set_highlight(highlight[1], highlight[2])
+end
 Statusline = {}
 
 Statusline.active = function()
+
+    local mode = parts.mode .. get_mode()
+    local mode_alt = parts.mode_alt .. part_separator 
+    local filename = parts.inactive .. get_filename()
+    local filetype_alt = parts.filetype_alt .. part_separator
+    local filetype = parts.filetype .. get_filetype()
+    local line_col = parts.line_col .. get_lineinfo()
+    local line_col_alt = parts.line_col_alt .. part_separator
+
   return table.concat {
-    "%#Statusline#",
-    --update_mode_colors(),
-    get_mode(),
-    "%#Normal# ",
-    filename(),
-    "%#Normal#",
-    lsp(),
-    "%=%#StatusLineExtra#",
-    filetype(),
-    lineinfo(),
+        parts.active, mode, mode_alt,
+        "%=", filename, "%=",
+        filetype_alt, filetype, line_col_alt, line_col
   }
 end
 
 function Statusline.inactive()
   return " %F"
+end
+
+Statusline.explorer = function()
+    local title = parts.mode .. '   '
+    local title_alt = parts.mode_alt .. part_separator
+
+    return table.concat({ parts.active, title, title_alt })
 end
 
 
@@ -187,5 +206,6 @@ vim.api.nvim_exec([[
   au!
   au WinEnter,BufEnter * setlocal statusline=%!v:lua.Statusline.active()
   au WinLeave,BufLeave * setlocal statusline=%!v:lua.Statusline.inactive()
+  au WinEnter,BufEnter,FileType NvimTree setlocal statusline=%!v:lua.Statusline.explorer()
   augroup END
 ]], false)
