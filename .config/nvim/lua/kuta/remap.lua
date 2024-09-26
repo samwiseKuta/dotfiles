@@ -46,13 +46,13 @@ vim.api.nvim_create_autocmd('LspAttach',{
 
         vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
         vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
-        vim.keymap.set("n", "<leader>vws", function() vim.lsp.buf.workspace_symbol() end, opts)
-        vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
+        vim.keymap.set("n", "<leader>ws", function() vim.lsp.buf.workspace_symbol() end, opts)
+        vim.keymap.set("n", "<leader>ld", function() vim.diagnostic.open_float() end, opts)
         vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
         vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
-        vim.keymap.set("n", "<leader>vca", function() vim.lsp.buf.code_action() end, opts)
-        vim.keymap.set("n", "<leader>vrr", function() vim.lsp.buf.references() end, opts)
-        vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
+        vim.keymap.set("n", "<leader>ca", function() vim.lsp.buf.code_action() end, opts)
+        vim.keymap.set("n", "<leader>rf", function() vim.lsp.buf.references() end, opts)
+        vim.keymap.set("n", "<leader>rn", function() vim.lsp.buf.rename() end, opts)
         vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
     end
 })
@@ -60,10 +60,10 @@ vim.api.nvim_create_autocmd('LspAttach',{
 vim.keymap.set("n", "<C-Left>", ":vertical resize +3<CR>")		-- Control+Left resizes vertical split +
 vim.keymap.set("n", "<C-Right>", ":vertical resize -3<CR>")	-- Control+Right resizes vertical split -
 -- easy split navigation
-vim.keymap.set("n", "<C-h>", "<C-w>h")						-- control+h switches to left split
-vim.keymap.set("n", "<C-l>", "<C-w>l")						-- control+l switches to right split
-vim.keymap.set("n", "<C-j>", "<C-w>j")						-- control+j switches to bottom split
-vim.keymap.set("n", "<C-k>", "<C-w>k")						-- control+k switches to top split
+vim.keymap.set("n", "<C-h>", "<C-w>h")	-- control+h switches to left split
+vim.keymap.set("n", "<C-l>", "<C-w>l")	-- control+l switches to right split
+vim.keymap.set("n", "<C-j>", "<C-w>j")	-- control+j switches to bottom split
+vim.keymap.set("n", "<C-k>", "<C-w>k")  -- control+k switches to top split
 --Auto completion bindings
 -- Bindings can be found in lazy/cmp.lua
 
