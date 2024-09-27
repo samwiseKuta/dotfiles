@@ -5,7 +5,7 @@ local part_separator = " ";
 local truncated_width = {
     mode = 50,
     lsp_info = 100,
-    filename = 120,
+    filename = 115,
 }
 
 -- Outputs true/false whether the input width is less than buffer width
@@ -72,9 +72,18 @@ end
 
 -- Outputs either the full filepath or a truncated one
 local function get_filename()
-
-    if is_truncated(truncated_width.filename) then return " %<%f " end
-    return " %<%F "
+    local filename = is_truncated(truncated_width.filename)
+        and vim.fn.expand('%:.') or vim.fn.expand('%:~')
+    local allocated_space = is_truncated(truncated_width.filename) and 40 or 70
+    local padding = allocated_space - #filename
+    padding = (padding % 2 == 0) and (padding / 2) or ((padding+1) / 2)
+    for i = 1,padding,1 do
+        filename = " "..filename.." "
+    end
+    -- The %< is to tell the statusline to start removing filename instead of the elements before
+    -- it if the status line gets too short
+    -- So if the status line gets too short, mode and lsp info will stay but filename gets deleted
+    return "%<"..filename
 end
 
 
@@ -229,9 +238,15 @@ Statusline.active = function()
     local line_col_alt = parts.line_col_alt --.. part_separator
 
     return table.concat {
-        parts.active, mode, mode_alt,lsp_info,
+        parts.active,
+        mode,
+        mode_alt,
+        lsp_info,
         filename, "%=",
-        filetype_alt, filetype, line_col_alt, line_col
+        filetype_alt,
+        filetype,
+        line_col_alt,
+        line_col
     }
 end
 
@@ -239,11 +254,9 @@ function Statusline.inactive()
     return "%F"
 end
 
-Statusline.explorer = function()
-    local title = parts.mode .. ' '
-    local title_alt = parts.mode_alt .. part_separator
-
-    return table.concat({ parts.active, title, title_alt })
+Statusline.netrw = function()
+    local title = parts.mode
+    return table.concat({ parts.active, title})
 end
 
 
@@ -254,6 +267,6 @@ vim.api.nvim_exec([[
   au!
   au WinEnter,BufEnter * setlocal statusline=%!v:lua.Statusline.active()
   au WinLeave,BufLeave * setlocal statusline=%!v:lua.Statusline.inactive()
-  au WinEnter,BufEnter,FileType NvimTree setlocal statusline=%!v:lua.Statusline.explorer()
+  au WinEnter,BufEnter,FileType NvimTree setlocal statusline=%!v:lua.Statusline.netrw()
   augroup END
 ]], false)
