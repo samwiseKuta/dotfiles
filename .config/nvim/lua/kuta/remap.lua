@@ -1,7 +1,8 @@
 --Set the leader to start commands
 vim.g.mapleader = " "
 -- Open netrw (File tree)
-vim.keymap.set("n", "<leader>ko",':30Lex<CR>',{silent=true})
+-- '<Cmd>30Lex<CR>'
+vim.keymap.set("n", "<leader>ko", '<Cmd>30Lex<CR>',{silent=true})
 --CTRL C should function the same as escape, something with vertical save idk theprimeagem said it
 vim.keymap.set("n","<C-c>","<Esc>")
 vim.keymap.set("v","<C-c>","<Esc>")
