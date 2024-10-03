@@ -5,22 +5,10 @@
 -- Blog: (https://nuxsh.is-a.dev/blog/custom-nvim-statusline.html)
 -- Blog: (https://elianiva.my.id/posts/neovim-lua-statusline/)
 
--- Determines how much space an object has before it has to be truncated
--- These are default values, for certain elements of the status line this value is dynamic,
--- making these values just safety checks if something goes wrong
-local default_truncate_width = {
-    mode = 55,
-    lsp_info = 45,
-    filename = 60,
-}
-
--- Outputs true/false whether the input width is less than buffer width
-local function is_truncated(width)
-    local current_width = vim.api.nvim_win_get_width(0)
-    return current_width < width
-end
-
-
+-- Disables mode in default statusline
+vim.opt.showmode = false
+-- Sets priority for the order in which regions should be truncated
+-- lower number -> higher priority
 -- Maps the shortcut vim returns for it's mode to what should be displayed on the statusline
 -- Has two values, the shorter one is for truncated width
 local modes = {
@@ -46,30 +34,28 @@ local modes = {
     ['t']  = {'Terminal ', 'T'};
 }
 
--- Outputs the current mode, either full or truncated based on truncated_width.mode
-local function get_mode()
+-- Outputs the current mode, either full or truncated based on in param
+local function get_mode(truncated)
     local current_mode = vim.api.nvim_get_mode().mode
-    if is_truncated(default_truncate_width.mode) then
-        return string.format(' %s ', modes[current_mode][2]):upper()
+    if truncated==nil or truncated == false  then
+    return string.format(' %s ', modes[current_mode][1]):upper()
     end
 
-    return string.format(' %s ', modes[current_mode][1]):upper()
+    return string.format(' %s ', modes[current_mode][2]):upper()
 end
 
--- Outputs either the full filepath or a truncated one
-local function get_filename(available_space)
-    if(available_space == nil)then available_space = default_truncate_width.filename  end
-    local fullpath  = vim.fn.expand('%:~')
-    local shortpath = vim.fn.expand('%:.')
-    local filename  = (#fullpath < available_space) and fullpath or shortpath
+-- Outputs either the full filepath or a truncated one based on in param
+local function get_filename(truncated)
+    if(truncated == nil or truncated == false)then return vim.fn.expand('%:~') end
 
-    return filename
+
+    return vim.fn.expand('%:.')
 end
 
 
 -- Outputs errors, hints and warnings it gets from the LSP,either the native or a custom one
-local function get_lsp_info(available_space)
-    if(available_space == nil)then available_space = default_truncate_width.lsp_info end
+-- Full or truncated based on in param
+local function get_lsp_info(truncated)
     local counter = {}
     local levels = {
         errors = "Error",
@@ -79,6 +65,7 @@ local function get_lsp_info(available_space)
     }
     local output = {}
     local count = 0;
+
     for k, level in pairs(levels) do
         count = vim.tbl_count(vim.diagnostic.get(0, { severity = level }));
         if count ~= 0   then
@@ -87,11 +74,21 @@ local function get_lsp_info(available_space)
         end
     end
 
-    if(#table.concat(output) > available_space) then
-        output = {}
-        for k,value in pairs(counter) do
-            table.insert(output,string.sub(k,1,1).."·"..value)
+    if(truncated == nil or truncated == false) then
+
+        if #output > 1 then
+            for k, value in pairs(output) do
+                output[k] = value.."|"
+            end
+
         end
+        return table.concat(output)
+
+    end
+
+    output = {}
+    for k,value in pairs(counter) do
+        table.insert(output,string.sub(k,1,1).."·"..value)
     end
 
     if #output > 1 then
@@ -106,23 +103,23 @@ end
 
 
 
--- Outputs detected filetype
+-- Outputs detected filetype and the modified symbol next to it
 local function get_filetype()
-    return string.format(" %s ", vim.bo.filetype):upper()
+    return string.format(" %s", vim.bo.filetype.." %m%r% "):upper()
 end
 
--- Outputs information about cursor position and percentage scroll
+-- Outputs cursor position and  scroll% from top
 local function get_lineinfo()
     if vim.bo.filetype == "alpha" then
         return ""
     end
-    return "%m%r% %l|%c %P"
+    return "%l|%c %P"
 end
 
 -- Defining 'parts' of the statusline by putting them into a highlight group, which can then
 -- be colored a specific way
 local highlight_groups = {
-    active      ='%#StatusLine#',
+    netrw      ='%#Netrw#',
     inactive    ='%#StatuslineNC#',
     mode        ='%#Mode#',
     lsp         ='%#Lsp#',
@@ -134,14 +131,14 @@ local highlight_groups = {
 
 -- This table matches bg and fg colors to the previously defined highlight groups
 local colors = {
-    {'StatusLine', { fg = '#3C3836', bg = '#EBDBB2' }},
-    {'StatusLineNC', { fg = '#3C3836', bg = '#928374' }},
-    {'Mode', { bg = '#928374', fg = '#1D2021', gui="bold" }},
-    {'Lsp', { bg = '#504945', fg = '#EBDBB2' }},
-    {'Filename', { bg = '#504945', fg = '#fffff' }},
-    {'Modified', { bg = '#928374', fg = '#1D2021', gui="bold" }},
-    {'Filetype', { bg = '#504945', fg = '#EBDBB2' }},
-    {'LineCol', { bg = '#928374', fg = '#1D2021', gui="bold" }},
+    {'Netrw', { fg = '#3C3836', bg = '#292522' }},
+    {'StatusLineNC', { fg = '#867462', bg = '#292522' }},
+    {'Mode', { bg = '#A3A9CE', fg = '#292522', gui="bold" }},
+    {'Lsp', { bg = '#292522', fg = '#EBC06D' }},
+    {'Filename', { bg = '#292522', fg = '#A3A9CE' }},
+    {'Modified', { bg = '#928374', fg = '#1D2021'}},
+    {'Filetype', { bg = '#403A36', fg = '#ECE1D7',gui="bold" }},
+    {'LineCol', { bg = '#403A36', fg = '#A3A9CE', gui="bold" }},
 }
 
 -- This function pairs up the highlight group with it's color
@@ -156,74 +153,96 @@ local set_color = function(group, options)
 end
 
 
-local color_it = function()
+local color_all = function()
     for _,color in ipairs(colors) do
         set_color(color[1], color[2])
     end
 end
 
 
--- Outputs given string, padded on both sides by padding_string until final_length has been reached
-local even_padding_to_length = function(string,final_length,padding_string)
+-- Outputs given string, padded on both sides by pad_length
+local even_padding_by_amount = function(string,pad_length,padding_string)
 
-    local padding   = (final_length - #string)
+    pad_length = (pad_length % 2 == 0) and (pad_length / 2) or ((pad_length+1) / 2)
 
-    padding = (padding % 2 == 0) and (padding / 2) or ((padding+1) / 2)
-
-    for i = 1,padding,1 do
+    for i = 1,pad_length,1 do
         string = padding_string..string..padding_string
     end
     return string
 
 end
 
+
 Statusline = {}
 
 -- Statusline for current window
 Statusline.active = function()
+    color_all()
 
-    local mode =  get_mode()
-    local filetype =  get_filetype()
-    local line_col =  get_lineinfo()
+    local M = {
+        mode = get_mode(),
+        filename = get_filename(),
+        filetype = get_filetype(),
+        lsp_info = get_lsp_info(),
+        line_col = get_lineinfo(),
+    }
+    local window_width = vim.api.nvim_win_get_width(0)
+    local remaining_space = window_width - #table.concat{
+        M.mode,M.filename,M.filetype,M.lsp_info,M.line_col
+    }
 
-    local remaining_space = vim.api.nvim_win_get_width(0) - (#mode+#filetype+#line_col)
-    local lsp_info = get_lsp_info(remaining_space)
-    remaining_space = remaining_space - #lsp_info
-    local filename = get_filename(remaining_space)
-    lsp_info = get_lsp_info(remaining_space-#filename)
+    if(remaining_space <= 0) then
+        local truncated_values = {
+            filename = get_filename(true),
+            lsp_info = get_lsp_info(true),
+            mode = get_mode(true)
+        }
+        local truncate_queue = {
+            "filename",
+            "lsp_info",
+            "mode"
+        }
+        for _,value in pairs(truncate_queue) do
+            M[value] = truncated_values[value]
+            remaining_space = window_width - #table.concat{
+                M.mode,M.filename,M.filetype,M.lsp_info,M.line_col
+            }
+
+            if(remaining_space > 0) then break end
+        end
+
+    end
 
     -- %< tells the statusline to start removing this element before the others
     -- So if the status line gets too short, mode and lsp info will stay but filename gets deleted
     -- %= Makes the element function similarly to CSS flex space around, best I can explain it
-    filename = "%<"..even_padding_to_length(filename,remaining_space," ").."%="
+    M.filename = "%<"..even_padding_by_amount(M.filename,remaining_space," ").."%="
+    M.lsp_info = " "..M.lsp_info
 
 
     local statusline = table.concat {
-        highlight_groups.active,
-        highlight_groups.mode       .. mode,
-        highlight_groups.lsp        .. lsp_info,
-        highlight_groups.filename   .. filename,
-        highlight_groups.filetype   .. filetype,
-        highlight_groups.line_col   .. line_col
+        highlight_groups.mode       .. M.mode,
+        highlight_groups.lsp        .. M.lsp_info,
+        highlight_groups.filename   .. M.filename,
+        highlight_groups.filetype   .. M.filetype,
+        highlight_groups.line_col   .. M.line_col
     }
-    color_it()
     return statusline
 end
 -- The inactive window statusline
 function Statusline.inactive()
     -- A way to get full terminal width
     local term_width = tonumber(vim.api.nvim_command_output("echo &columns")) or 0
-    color_it()
+    color_all()
     return highlight_groups.inactive
         ..
-        even_padding_to_length(get_filename(),term_width-vim.api.nvim_win_get_width(0),".")
+        even_padding_by_amount(get_filename(),term_width-vim.api.nvim_win_get_width(0)-#get_filename(),".")
 end
 
 -- Exporer (netrw) statusline
 Statusline.netrw = function()
-    color_it()
-    return " "
-
+    color_all()
+    return highlight_groups.netrw.." "
 end
 
 
@@ -234,6 +253,6 @@ vim.api.nvim_exec([[
   au!
   au WinEnter,BufEnter * setlocal statusline=%!v:lua.Statusline.active()
   au WinLeave,BufLeave * setlocal statusline=%!v:lua.Statusline.inactive()
-  au WinEnter,BufEnter,FileType NvimTree setlocal statusline=%!v:lua.Statusline.netrw()
+  au WinEnter,BufEnter,FileType netrw setlocal statusline=%!v:lua.Statusline.netrw()
   augroup END
 ]], false)
