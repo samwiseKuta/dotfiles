@@ -36,12 +36,17 @@ local modes = {
 
 -- Outputs the current mode, either full or truncated based on in param
 local function get_mode(truncated)
-    local current_mode = vim.api.nvim_get_mode().mode
     if truncated==nil or truncated == false  then
-    return string.format(' %s ', modes[current_mode][1]):upper()
+        local current_mode = modes[vim.api.nvim_get_mode().mode][1]
+        if(current_mode == nil) then current_mode = "Unknown" end
+        print(current_mode)
+        return string.format(' %s ', current_mode):upper()
     end
 
-    return string.format(' %s ', modes[current_mode][2]):upper()
+    local current_mode = modes[vim.api.nvim_get_mode().mode][1]
+    if(current_mode == nil) then current_mode = "Unknown" end
+    return string.format(' %s ', current_mode):upper()
+
 end
 
 -- Outputs either the full filepath or a truncated one based on in param
@@ -165,7 +170,7 @@ local even_padding_by_amount = function(string,pad_length,padding_string)
 
     pad_length = (pad_length % 2 == 0) and (pad_length / 2) or ((pad_length+1) / 2)
 
-    for i = 1,pad_length,1 do
+    for _ = 1,pad_length,1 do
         string = padding_string..string..padding_string
     end
     return string
