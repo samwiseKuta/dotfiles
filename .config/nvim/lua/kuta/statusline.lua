@@ -39,7 +39,6 @@ local function get_mode(truncated)
     if truncated==nil or truncated == false  then
         local current_mode = modes[vim.api.nvim_get_mode().mode][1]
         if(current_mode == nil) then current_mode = "Unknown" end
-        print(current_mode)
         return string.format(' %s ', current_mode):upper()
     end
 
