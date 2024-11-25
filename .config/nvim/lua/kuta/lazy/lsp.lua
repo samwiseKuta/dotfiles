@@ -1,5 +1,5 @@
 -- <ENSURE_INSTALLED>
--- Servers that will be installed and maintained by Mason
+-- Servers that will be installed and maintained by Mason.nvim
 local lsp_servers = {
     "ts_ls",
     "gradle_ls",

@@ -12,10 +12,12 @@ local install_these_parsers = {
     "javascript",
     "typescript",
     "markdown",
+    "markdown_inline",
+    --"latex",
     "yaml",
     "vue",
     "php",
-    "kotlin"
+    "kotlin",
 }
 return{
 
@@ -32,7 +34,7 @@ return{
 
             -- Automatically install missing parsers when entering buffer
             -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-            auto_install = true,
+            auto_install = false,
 
 
             ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)

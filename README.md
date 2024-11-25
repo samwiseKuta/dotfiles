@@ -7,6 +7,11 @@ even apps from one machine to another.
 
 For now only focused on moving configurations through Linux machines, might make windows later.
 
+## Prerequisites
+### Linux
+- Bash (duh) or any other terminal that can run bash scripts
+- GNU Stow
+
 ## Installation
 ### Linux
 **1)** Create a directory in your $HOME folder, call it dotfiles for example. Then navigate into it
