@@ -5,12 +5,5 @@
         "updated_at": "2024-11-25T15:44:11.360017",
         "last_commit": "7dedd992709fa2297735cddf852404144d4da47c",
         "last_commit_time": "2023-11-14T16:53:20"
-    },
-    "com.github.zensoup.ulauncher-unicode": {
-        "id": "com.github.zensoup.ulauncher-unicode",
-        "url": "https://github.com/zensoup/ulauncher-unicode",
-        "updated_at": "2024-11-25T23:34:45.189753",
-        "last_commit": "0ad36c00a888e687b4bfbf76f266f1000040b337",
-        "last_commit_time": "2019-07-11T06:53:31"
     }
 }
