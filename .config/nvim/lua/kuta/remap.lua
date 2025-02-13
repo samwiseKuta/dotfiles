@@ -1,11 +1,10 @@
 --Set the leader to start commands
 vim.g.mapleader = " "
 -- Open netrw (File tree)
--- '<Cmd>30Lex<CR>'
-vim.keymap.set("n", "<leader>ko", '<Cmd>30Lex<CR>',{silent=true})
---CTRL C should function the same as escape, something with vertical save idk theprimeagem said it
-vim.keymap.set("n","<C-c>","<Esc>")
-vim.keymap.set("v","<C-c>","<Esc>")
+-- '<Cmd>Lex<CR>'
+vim.keymap.set("n", "<leader>ko", '<Cmd>Lex<CR>',{silent=true})
+--CTRL C should function the same as escape
+vim.keymap.set({"n","v","i","x"},"<C-c>","<Esc>")
 --Remove trailing whitespace
 vim.keymap.set('n', '<Leader>rws', [[:%s/\s\+$//e<cr>]])
 --Move highlited lines up and down with capital J and K
@@ -42,7 +41,6 @@ vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 --LSP bindings
 vim.api.nvim_create_autocmd('LspAttach',{
     callback = function(e)
-
         local opts = {buffer = e.buf}
 
         vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
@@ -60,6 +58,8 @@ vim.api.nvim_create_autocmd('LspAttach',{
 -- adjust split sizes easier
 vim.keymap.set("n", "<C-Left>", ":vertical resize -3<CR>",{silent = true})		-- Control+Left resizes vertical split +
 vim.keymap.set("n", "<C-Right>", ":vertical resize +3<CR>",{silent=true})	-- Control+Right resizes vertical split -
+vim.keymap.set("n", "<C-Up>", ":horizontal resize -3<CR>",{silent = true})		-- Control+Left resizes vertical split +
+vim.keymap.set("n", "<C-Down>", ":horizontal resize +3<CR>",{silent=true})	-- Control+Right resizes vertical split -
 -- easy split navigation
 vim.keymap.set("n", "<C-h>", "<C-W>h")	-- control+h switches to left split
 vim.keymap.set("n", "<C-l>", "<C-W>l")	-- control+l switches to right split
@@ -79,7 +79,6 @@ local insert_text_at_cursor = function(text)
 
     local cursor_pos = vim.api.nvim_win_get_cursor(0)
     local line = cursor_pos[1]-1
-    local col = cursor_pos[2]
     vim.api.nvim_buf_set_lines(0,line,line,false,{text})
 
 end

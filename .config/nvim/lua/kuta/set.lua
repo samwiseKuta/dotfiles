@@ -7,12 +7,25 @@ vim.opt.compatible = false;
 --Commands
 vim.opt.cmdheight = 1; -- Commands are x lines tall
 
---netrw
-vim.g.netrw_liststyle = 3; -- Lists like a tree view
-vim.g.netrw_browse_split = 0
-vim.g.netrw_banner = 0
-vim.g.netrw_winsize = 25
+vim.g.netrw_keepdir = 0;
 
+--============== netrw ============== 
+---- Make netrw open in the current file buffer
+
+vim.g.netrw_liststyle = 3; -- Lists like a tree view
+vim.g.netrw_browse_split = 4
+-- Netrw banner
+-- 0 : Disable banner
+-- 1 : Enable banner
+vim.g.netrw_banner = 0
+-- Show directories first (sorting)
+vim.g.netrw_sort_sequence = [[[\/]$,*]]
+vim.g.netrw_winsize = 25
+-- Keep the current directory and the browsing directory synced.
+-- This helps you avoid the move files error.
+vim.g.netrw_keepdir = 0
+-- Human-readable files sizes
+vim.g.netrw_sizestyle = "H"
 -- Line numbers and Relative line numbers
 vim.opt.nu = true
 vim.opt.relativenumber = true
