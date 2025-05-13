@@ -12,6 +12,8 @@ local lsp_servers = {
     "html",
     "volar",
     "tailwindcss",
+    "csharp_ls",
+
 }
 -- </ENSURE_INSTALLED>
 return {
@@ -73,6 +75,7 @@ return {
                 lspconfig[server].setup{
                     filetypes = {'vue','typescript','javascript','json',}
                 }
+                goto continue
             end
 
             if(server == "jdtls") then

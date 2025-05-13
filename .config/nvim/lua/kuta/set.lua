@@ -11,7 +11,7 @@ vim.opt.cmdheight = 1;          -- Commands are x lines tall
 
 --============== |netrw| ============== 
 vim.g.netrw_liststyle = 3;              -- Lists like a tree view
-vim.g.netrw_browse_split = 4            -- Make netrw open in the current file buffer
+vim.g.netrw_browse_split = 0            -- Make netrw open in the current file buffer
 vim.g.netrw_banner = 0                  -- Disable banner 
 vim.g.netrw_sort_sequence = [[[\/]$,*]] -- Show directories first (sorting)
 vim.g.netrw_winsize = 25                -- Netrw size
