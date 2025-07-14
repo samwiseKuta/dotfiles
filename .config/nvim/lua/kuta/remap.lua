@@ -1,8 +1,10 @@
 -- ============= |General| ========
 vim.g.mapleader = " "                                               -- Leader for commands
 vim.keymap.set( "n", "<leader>ko", '<Cmd>Lex<CR>', {silent=true})   -- Open netrw (File tree)
-vim.keymap.set({"n","v","i","x"},"<C-c>","<Esc>")                   --CTRL C = Esc
-vim.keymap.set("n","Q","")                                          --capital Q is evil ( no clue why)
+vim.keymap.set({"n","v","i","x"},"<C-c>","<Esc>")                   -- CTRL C = Esc
+vim.keymap.set("n","Q","")                                          -- Capital Q is evil ( no clue why)
+vim.keymap.set("i","<C-BS>","")                                     -- CTRL+Backspace to delete word
+vim.keymap.set({ "i", "c" }, "<C-h>", "<C-w>", { noremap = true, silent = true })
 -- ============= |Highlighted| ========
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")    -- Move highlited lines down
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")    -- Move highlighted lines up
@@ -45,7 +47,7 @@ vim.api.nvim_create_autocmd('LspAttach',{
         vim.keymap.set("n", "<C-]>", function() vim.diagnostic.goto_prev() end, opts)
         vim.keymap.set("n", "<leader>vca", function() vim.lsp.buf.code_action() end, opts)
         vim.keymap.set("n", "<leader>rn", function() vim.lsp.buf.rename() end, opts)
-        vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
+        vim.keymap.set("i", "<C-g>", function() vim.lsp.buf.signature_help() end, opts)
     end
 })
 -- ============= |Split size control| ========

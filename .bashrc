@@ -102,9 +102,13 @@ alias vim='nvim'
 alias neovim='nvim'
 alias nvim='nvim'
 
+
+
+# Make Ctrl+H (sent by Ctrl+Backspace) delete the word behind the cursor
+bind '"\C-h": backward-kill-word'
+
 alias gitToken='cat ~/.gitToken | xclip -selection clipboard'
 alias copy='xclip -selection clipboard'
-alias xampp='sudo /opt/lampp/manager-linux-x64.run &'
 alias stow='sudo STOW_DIR=/usr/local/stow /usr/bin/stow'
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -113,10 +117,6 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # Work aliases
 alias sst-run="sst shell --stage kuta bun -- run"
 # Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
@@ -144,7 +144,7 @@ export PATH=$M2:$PATH
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH=$BUN_INSTALL/bin:$PATH
-export PATH="/home/charming/.bun/bin:$PATH"
+export PATH="/home/samwise/.bun/bin:$PATH"
 
 echo "======================================"
 echo "⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀                
@@ -161,3 +161,4 @@ echo "⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠈⠈⠉⠻⣴⠀⠀⣤⠟⠁⠁⠁⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠳⠞⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀"
 echo "======================================"
+export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
