@@ -1,6 +1,6 @@
 -- ============= |General| ========
 vim.g.mapleader = " "                                               -- Leader for commands
-vim.keymap.set( "n", "<leader>ko", '<Cmd>Lex<CR>', {silent=true})   -- Open netrw (File tree)
+vim.keymap.set( "n", "<leader>ko", '<Cmd>30Lexplore<CR>', {silent=true})   -- Open netrw (File tree)
 vim.keymap.set({"n","v","i","x"},"<C-c>","<Esc>")                   -- CTRL C = Esc
 vim.keymap.set("n","Q","")                                          -- Capital Q is evil ( no clue why)
 vim.keymap.set("i","<C-BS>","")                                     -- CTRL+Backspace to delete word

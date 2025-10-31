@@ -66,8 +66,6 @@ return {
         -- By default all servers are setup with the default lspconfig.setup
         -- If conditions for specific server setups
         for _,server in pairs(lsp_servers) do
-            local mason_registry = require('mason-registry')
-
             if(server == "jdtls") then
                 goto continue
             end
@@ -77,10 +75,8 @@ return {
                 lspconfig[server].setup({
                     capabilities = capabilities,
                     settings = {
-                        Lua = {
-                            diagnostics = {
-                                globals = { "vim" },
-                            },
+                        diagnostics = {
+                            globals = {"vim"}
                         },
                     },
                 })
