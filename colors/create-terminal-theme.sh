@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Base16 - Gnome Terminal color scheme install script
 
-[[ -z "$PROFILE_NAME" ]] && PROFILE_NAME="mingalf"
+[[ -z "$PROFILE_NAME" ]] && PROFILE_NAME="mingalf.sexy"
 [[ -z "$PROFILE_SLUG" ]] && PROFILE_SLUG="mingalf"
 [[ -z "$DCONF" ]] && DCONF=dconf
 [[ -z "$UUIDGEN" ]] && UUIDGEN=uuidgen
@@ -58,7 +58,7 @@ if which "$DCONF" > /dev/null 2>&1; then
 
         # update profile values with theme options
         dset visible-name "'$PROFILE_NAME'"
-        dset palette "['#050601', '#e77d28', '#b4c22f', '#e9d880', '#e77d28', '#e9d880', '#b4c22f', '#ded1ba', '#0c0e02', '#f7862b', '#c6d534', '#e9e480', '#f7862b', '#e9e480', '#f7862b', '#efe1c8']"
+        dset palette "['#050601', '#ff8e1c', '#b4c22f', '#e9d880', '#ff8e1c', '#e9d880', '#b4c22f', '#ded1ba', '#0c0e02', '#ff860d', '#c6d534', '#e9e480', '#ff860d', '#e9e480', '#ff860d', '#efe1c8']"
         dset background-color "'#050601'"
         dset foreground-color "'#ded1ba'"
         dset bold-color "'#ded1ba'"
@@ -108,7 +108,7 @@ glist_append() {
 glist_append string /apps/gnome-terminal/global/profile_list "$PROFILE_SLUG"
 
 gset string visible_name "$PROFILE_NAME"
-gset string palette "#050601:#e77d28:#b4c22f:#e9d880:#e77d28:#e9d880:#b4c22f:#ded1ba:#0c0e02:#f7862b:#c6d534:#e9e480:#f7862b:#e9e480:#f7862b:#efe1c8"
+gset string palette "#050601:#ff8e1c:#b4c22f:#e9d880:#ff8e1c:#e9d880:#b4c22f:#ded1ba:#0c0e02:#ff860d:#c6d534:#e9e480:#ff860d:#e9e480:#ff860d:#efe1c8"
 gset string background_color "#050601"
 gset string foreground_color "#ded1ba"
 gset string bold_color "#ded1ba"
