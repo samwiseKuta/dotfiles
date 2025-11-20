@@ -38,7 +38,7 @@ return {
 					vim.notify("Unsupported OS", vim.log.levels.WARN, { title = "Jdtls" })
 				end
 
-				local root_markers = { ".git", "mvnw", "gradlew", "pom.xml", "build.gradle" }
+				local root_markers = { ".git", "mvnw", "gradlew", "pom.xml", "build.gradle","Main.java" }
 
 				local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 
