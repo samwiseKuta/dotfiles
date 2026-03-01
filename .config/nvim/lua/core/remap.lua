@@ -1,10 +1,20 @@
 -- ============= |General| ========
 vim.g.mapleader = " "                                               -- Leader for commands
-vim.keymap.set( "n", "<leader>ko", '<Cmd>30Lexplore<CR>', {silent=true})   -- Open netrw (File tree)
 vim.keymap.set({"n","v","i","x"},"<C-c>","<Esc>")                   -- CTRL C = Esc
 vim.keymap.set("n","Q","")                                          -- Capital Q is evil ( no clue why)
 vim.keymap.set("i","<C-BS>","")                                     -- CTRL+Backspace to delete word
 vim.keymap.set({ "i", "c" }, "<C-h>", "<C-w>", { noremap = true, silent = true })
+-- ============= |Netrw| ========
+vim.keymap.set( "n", "<leader>ko", '<Cmd>30Lexplore<CR>', {silent=true})   -- Open netrw (File tree)
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "netrw",
+  callback = function()
+    vim.keymap.set("n", "<C-l>", "<C-w>l", { buffer = true, noremap = true })
+    vim.keymap.set("n", "<C-h>", "<C-w>h", { buffer = true, noremap = true })
+    vim.keymap.set("n", "<C-k>", "<C-w>k", { buffer = true, noremap = true })
+    vim.keymap.set("n", "<C-j>", "<C-w>j", { buffer = true, noremap = true })
+  end,
+})
 -- ============= |Highlighted| ========
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")    -- Move highlited lines down
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")    -- Move highlighted lines up
@@ -68,8 +78,18 @@ vim.keymap.set("i", "<C-s>a", "α ")
 vim.keymap.set("i", "<C-s>b", "β ")
 vim.keymap.set("i", "<C-s>g", "γ ")
 vim.keymap.set("i", "<C-s>o", "Ω ")
-
-
+-- ============= |Filetypes| ========
+vim.filetype.add({
+    pattern = {
+        ["%.*xaml"] = "xml"
+    }
+})
+vim.cmd([[
+  augroup custom_filetype
+    autocmd!
+    autocmd BufRead,BufNewFile *.*xaml set filetype=xml
+  augroup END
+]])
 -- ============= |Useless shit| ========
 local insert_text_at_cursor = function(text)
 
