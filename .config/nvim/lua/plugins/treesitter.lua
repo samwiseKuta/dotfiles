@@ -2,6 +2,7 @@ local install_these_parsers = {
     "c",
     "java",
     "python",
+    "xml",
     "html",
     "css",
     "lua",
