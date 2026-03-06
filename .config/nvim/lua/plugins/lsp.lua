@@ -2,8 +2,22 @@
 -- Servers that will be installed and maintained by Mason.nvim
 -- The keys are the names of the language servers supported by mason, 
 -- and the values are config tables, for default config use empty table
+
+local vue_language_server = vim.fn.expand("$MASON/packages/vue-language-server")
+				.. "/node_modules/@vue/language-server"
 local lsp_servers = {
-    ts_ls ={},
+    ts_ls ={
+        init_options={
+            plugins ={
+                {
+                name = "@vue/typescript-plugin",
+                location = vue_language_server,
+                languages = {"vue"},
+                },
+            }
+        },
+        filetypes = {"javascript","typescript","vue" }
+    },
     gradle_ls ={},
     bashls={},
     cssls ={},
@@ -19,7 +33,8 @@ local lsp_servers = {
     html ={},
     tailwindcss ={},
     omnisharp ={},
-    lemminx = {}
+    lemminx = {},
+    vue_ls = {}
 }
 
 
