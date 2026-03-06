@@ -92,6 +92,34 @@ alias ll='ls -alFh --color=auto'
 alias la='ls -A --color=auto'
 alias l='ls -CF --color=auto'
 
+function bulk-rename(){
+    IFS= read -p "For each file in : " -r filePattern
+    IFS= read -p "Regex: " -r regex
+    IFS= read -p "Replace with:" -r substitution
+    eval "files=($filePattern)"
+    declare -A renamed_files=()
+    for f in "${files[@]}"; do
+        path=$(dirname "$f")
+        path="${path%/}"
+        filename=$(basename "$f")
+        rename=$(echo "$filename" | perl -pe "s/$regex/$substitution/g")
+        renamed_files+=(["$f"]="$path/$rename")
+        echo "$f"
+        echo 'V V V V V V V V V V'
+        echo "$path/$rename"
+        echo '##############################################'
+    done
+    echo 'Confirm? (y/n)'
+    read -p "Are you sure? " -n 1 -r
+    echo 
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        for key in "${!renamed_files[@]}"; do
+            mv -vi "$key" "${renamed_files[$key]}"
+        done
+    fi
+}
+
 function lazyg() {
     git add .
     git commit -a -m "$1"
